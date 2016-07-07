@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8EAC89CA-BD3E-40B4-9BDD-9ACFF322F926}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ZeXal.CPUCore</RootNamespace>
+    <AssemblyName>ZeXal.CPUCore</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CPU.cs" />
+    <Compile Include="Debugger.cs" />
+    <Compile Include="IIRHandler.cs" />
+    <Compile Include="IMemoryMapper.cs" />
+    <Compile Include="Opcodes\ADC.cs" />
+    <Compile Include="Opcodes\ADD.cs" />
+    <Compile Include="Opcodes\ADD_16bit.cs" />
+    <Compile Include="Opcodes\AND.cs" />
+    <Compile Include="Opcodes\BIT.cs" />
+    <Compile Include="Opcodes\CALL.cs" />
+    <Compile Include="Opcodes\CCF.cs" />
+    <Compile Include="Opcodes\CP.cs" />
+    <Compile Include="Opcodes\CPL.cs" />
+    <Compile Include="Opcodes\DAA.cs" />
+    <Compile Include="Opcodes\DEC.cs" />
+    <Compile Include="Opcodes\DEC_16bit.cs" />
+    <Compile Include="Opcodes\DI.cs" />
+    <Compile Include="Opcodes\EI.cs" />
+    <Compile Include="Opcodes\HALT.cs" />
+    <Compile Include="Opcodes\INC.cs" />
+    <Compile Include="Opcodes\INC_16bit.cs" />
+    <Compile Include="Opcodes\JP.cs" />
+    <Compile Include="Opcodes\LD.cs" />
+    <Compile Include="Opcodes\LD_16bit.cs" />
+    <Compile Include="Opcodes\NOP.cs" />
+    <Compile Include="Opcodes\Opcode.cs" />
+    <Compile Include="Opcodes\OR.cs" />
+    <Compile Include="Opcodes\POP.cs" />
+    <Compile Include="Opcodes\PREFIX_CB.cs" />
+    <Compile Include="Opcodes\PUSH.cs" />
+    <Compile Include="Opcodes\RES.cs" />
+    <Compile Include="Opcodes\RET.cs" />
+    <Compile Include="Opcodes\RL.cs" />
+    <Compile Include="Opcodes\RLA.cs" />
+    <Compile Include="Opcodes\RLC.cs" />
+    <Compile Include="Opcodes\RLCA.cs" />
+    <Compile Include="Opcodes\RR.cs" />
+    <Compile Include="Opcodes\RRA.cs" />
+    <Compile Include="Opcodes\RRC.cs" />
+    <Compile Include="Opcodes\RRCA.cs" />
+    <Compile Include="Opcodes\RST.cs" />
+    <Compile Include="Opcodes\SBC.cs" />
+    <Compile Include="Opcodes\SCF.cs" />
+    <Compile Include="Opcodes\SET.cs" />
+    <Compile Include="Opcodes\SLA.cs" />
+    <Compile Include="Opcodes\SRA.cs" />
+    <Compile Include="Opcodes\SRL.cs" />
+    <Compile Include="Opcodes\STOP.cs" />
+    <Compile Include="Opcodes\SUB.cs" />
+    <Compile Include="Opcodes\SWAP.cs" />
+    <Compile Include="Opcodes\XOR.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Registers.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
