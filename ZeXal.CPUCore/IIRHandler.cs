@@ -9,6 +9,8 @@ namespace ZeXal.CPUCore
     {
         void IR_Enable();
         void IR_Disable();
+        //Called after every instruction. Implementations must clear cpu.halted
+        //when an interrupt is pending, otherwise HALT never returns.
         void HandleIR(CPU cpu);
     }
     

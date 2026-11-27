@@ -15,6 +15,10 @@ namespace ZeXal.CPUCore
 
         public bool prefix_cb;
 
+        //Set by HALT: the CPU stops fetching opcodes until an interrupt is pending.
+        //The IIRHandler is responsible for clearing it (see IIRHandler.HandleIR).
+        public bool halted;
+
 
         private IMemoryMapper _memorymap;
         public IMemoryMapper memorymap
@@ -35,6 +39,7 @@ namespace ZeXal.CPUCore
         public CPU(IMemoryMapper memoryMap, IIRHandler IR_handler, ushort PC_start_address = 0x0100)
         {
             prefix_cb = false;
+            halted = false;
 
             enable_ir_next_op = false;
             disable_ir_next_op = false;
@@ -62,24 +67,30 @@ namespace ZeXal.CPUCore
                 disable_ir_next_op = false;
             }
 
-            byte opcode_id = _memorymap.GetByte((ushort)regs.PC);
-            Opcode next_opcode;
-            if (prefix_cb)
+            int cycles;
+
+            if (halted)
             {
-                next_opcode = cb_opcodes[opcode_id];
-                prefix_cb = false;
+                //While halted the CPU just burns cycles waiting for an interrupt
+                cycles = 4;
             }
-            else next_opcode = opcodes[opcode_id];
-
-            int cycles = next_opcode.Execute(this);
-
-            //CB prefixed opcodes are a single instruction: execute the second byte
-            //immediately, so that interrupts can't be serviced between prefix and opcode
-            if (prefix_cb)
+            else
             {
-                prefix_cb = false;
-                opcode_id = _memorymap.GetByte((ushort)regs.PC);
-                cycles += cb_opcodes[opcode_id].Execute(this);
+                byte opcode_id = _memorymap.GetByte((ushort)regs.PC);
+                Opcode next_opcode;
+                if (!opcodes.TryGetValue(opcode_id, out next_opcode))
+                    throw new InvalidOperationException(String.Format("Illegal opcode 0x{0:X2} at 0x{1:X4}", opcode_id, regs.PC));
+
+                cycles = next_opcode.Execute(this);
+
+                //CB prefixed opcodes are a single instruction: execute the second byte
+                //immediately, so that interrupts can't be serviced between prefix and opcode
+                if (prefix_cb)
+                {
+                    prefix_cb = false;
+                    opcode_id = _memorymap.GetByte((ushort)regs.PC);
+                    cycles += cb_opcodes[opcode_id].Execute(this);
+                }
             }
 
             //INTERRUPT HANDLING
@@ -135,10 +146,20 @@ namespace ZeXal.CPUCore
             enable_ir_next_op = true;
         }
 
+        //DI takes effect immediately on the LR35902
         public void IR_Disable()
         {
             enable_ir_next_op = false;
-            disable_ir_next_op = true;
+            disable_ir_next_op = false;
+            if (ir_handler != null) ir_handler.IR_Disable();
+        }
+
+        //Used by RETI: unlike EI, interrupts are enabled without delay
+        public void IR_EnableImmediate()
+        {
+            enable_ir_next_op = false;
+            disable_ir_next_op = false;
+            if (ir_handler != null) ir_handler.IR_Enable();
         }
 
 

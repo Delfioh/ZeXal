@@ -13,7 +13,7 @@ namespace ZeXal.Test
 
         public TestMemoryMap()
         {
-            memory = new byte[0xFFFF];
+            memory = new byte[0x10000];
         }
 
         public byte GetByte(ushort address)

@@ -144,7 +144,7 @@ namespace ZeXal.CPUCore.Opcodes
             ushort jump_address = cpu.memorymap.GetUShort(cpu.regs.SP);
             cpu.regs.SP += 2;
             cpu.regs.SetPC(jump_address);
-            cpu.IR_Enable();
+            cpu.IR_EnableImmediate();
             return 16;
         }
 
