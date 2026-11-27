@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZeXal.DMG", "ZeXal.DMG\ZeXa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZeXal.Test", "ZeXal.Test\ZeXal.Test.csproj", "{E952CF1A-4C49-4EC0-B9E4-07290DA9E935}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZeXal.Viewer", "ZeXal.Viewer\ZeXal.Viewer.csproj", "{4335051E-3EB9-41A6-8C12-F0CC16ED4045}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,16 @@ Global
 		{E952CF1A-4C49-4EC0-B9E4-07290DA9E935}.Release|Mixed Platforms.Build.0 = Release|x86
 		{E952CF1A-4C49-4EC0-B9E4-07290DA9E935}.Release|x86.ActiveCfg = Release|x86
 		{E952CF1A-4C49-4EC0-B9E4-07290DA9E935}.Release|x86.Build.0 = Release|x86
+		{4335051E-3EB9-41A6-8C12-F0CC16ED4045}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{4335051E-3EB9-41A6-8C12-F0CC16ED4045}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{4335051E-3EB9-41A6-8C12-F0CC16ED4045}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{4335051E-3EB9-41A6-8C12-F0CC16ED4045}.Debug|x86.ActiveCfg = Debug|x86
+		{4335051E-3EB9-41A6-8C12-F0CC16ED4045}.Debug|x86.Build.0 = Debug|x86
+		{4335051E-3EB9-41A6-8C12-F0CC16ED4045}.Release|Any CPU.ActiveCfg = Release|x86
+		{4335051E-3EB9-41A6-8C12-F0CC16ED4045}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{4335051E-3EB9-41A6-8C12-F0CC16ED4045}.Release|Mixed Platforms.Build.0 = Release|x86
+		{4335051E-3EB9-41A6-8C12-F0CC16ED4045}.Release|x86.ActiveCfg = Release|x86
+		{4335051E-3EB9-41A6-8C12-F0CC16ED4045}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

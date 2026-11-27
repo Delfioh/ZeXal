@@ -7,7 +7,26 @@ ZeXal is an emulator lib. for the Sharp LR35902, a cpu based on the Z80 and comm
 - **ZeXal.DMG**: the rest of the DMG-001 hardware: PPU (graphics), memory map, cartridge
   (ROM only, MBC1, MBC3 without RTC, MBC5), interrupts, timer, serial port, joypad.
   `GameBoy` puts everything together.
-- **ZeXal.Test**: console front end.
+- **ZeXal.Test**: console front end (test ROM runner).
+- **ZeXal.Viewer**: Windows Forms front end that shows the display in real time.
+
+## Viewer
+
+```
+ZeXal.Viewer.exe [rom.gb] [--scale 1-6]
+```
+
+Open a ROM with Ctrl+O or by dragging it on the window.
+
+| Key | Game Boy |
+| --- | --- |
+| Arrows | D-pad |
+| X / Z | A / B |
+| Enter / Backspace | Start / Select |
+| Tab (hold) | Fast forward |
+
+F5 resets, Ctrl+P pauses, Ctrl+1..6 change the window scale, Ctrl+S saves a PNG screenshot.
+The View menu switches between the DMG green and the grayscale palette.
 
 ## Running a test ROM
 
