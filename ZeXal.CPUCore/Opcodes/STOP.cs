@@ -16,13 +16,13 @@ namespace ZeXal.CPUCore.Opcodes
         public override int Execute(CPU cpu)
         {
             //CURRENTLY UNIMPLEMENTED
-            cpu.regs.IncreasePC(1);
+            cpu.regs.IncreasePC(2);
             return 4;
         }
 
         public override string GetOpcodeData(IMemoryMapper memorymap, ushort address, out byte n_bytes)
         {
-            n_bytes = 1;
+            n_bytes = 2;
             return "stop";
         }
     }

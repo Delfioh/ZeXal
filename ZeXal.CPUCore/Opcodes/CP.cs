@@ -20,22 +20,18 @@ namespace ZeXal.CPUCore.Opcodes
     {
         protected void PerformCP(CPU cpu, byte v)
         {
-            if (cpu.regs.A == v) cpu.regs.SetFlag(Flags.Z);
+            byte a = cpu.regs.A;
+
+            if (a == v) cpu.regs.SetFlag(Flags.Z);
             else cpu.regs.ClearFlag(Flags.Z);
 
             cpu.regs.SetFlag(Flags.N);
 
-            if ((byte)(cpu.regs.A & 0x0F) < (byte)(cpu.regs.A & 0x0F)) cpu.regs.SetFlag(Flags.H);
+            if ((a & 0x0F) < (v & 0x0F)) cpu.regs.SetFlag(Flags.H);
             else cpu.regs.ClearFlag(Flags.H);
 
-            if (cpu.regs.A < v)
-            {
-                cpu.regs.SetFlag(Flags.C);
-            }
-            else
-            {
-                cpu.regs.ClearFlag(Flags.C);
-            }
+            if (a < v) cpu.regs.SetFlag(Flags.C);
+            else cpu.regs.ClearFlag(Flags.C);
         }
     }
 
@@ -177,7 +173,7 @@ namespace ZeXal.CPUCore.Opcodes
         }
     }
 
-    //0xF6
+    //0xFE
     class CP_n : CP
     {
         public override int Execute(CPU cpu)

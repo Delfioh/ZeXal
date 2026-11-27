@@ -14,7 +14,7 @@ namespace ZeXal.CPUCore.Opcodes
     {
         public override int Execute(CPU cpu)
         {
-            cpu.regs.AF = cpu.memorymap.GetUShort(cpu.regs.SP);
+            cpu.regs.AF = (ushort)(cpu.memorymap.GetUShort(cpu.regs.SP) & 0xFFF0);
             cpu.regs.SP += 2;
             cpu.regs.IncreasePC(1);
             return 12;

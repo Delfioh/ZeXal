@@ -21,25 +21,19 @@ namespace ZeXal.CPUCore.Opcodes
     {
         protected byte PerformSBC(byte v1, byte v2, CPU cpu)
         {
-            int result = v1 - (v2 + cpu.regs.GetFlag(Flags.C));
+            int carry = cpu.regs.GetFlag(Flags.C);
+            int result = v1 - v2 - carry;
 
-            if (result == 0) cpu.regs.SetFlag(Flags.Z);
+            if ((byte)result == 0) cpu.regs.SetFlag(Flags.Z);
             else cpu.regs.ClearFlag(Flags.Z);
 
             cpu.regs.SetFlag(Flags.N);
 
-            if (result < 0)
-            {
-                result += 0xFF;
-                cpu.regs.SetFlag(Flags.C);
-            }
-            else
-            {
-                cpu.regs.ClearFlag(Flags.C);
-            }
-
-            if ((byte)((v1 & 0x0F) - (v2 & 0x0F) - cpu.regs.GetFlag(Flags.C)) < 0) cpu.regs.SetFlag(Flags.H);
+            if (((v1 & 0x0F) - (v2 & 0x0F) - carry) < 0) cpu.regs.SetFlag(Flags.H);
             else cpu.regs.ClearFlag(Flags.H);
+
+            if (result < 0) cpu.regs.SetFlag(Flags.C);
+            else cpu.regs.ClearFlag(Flags.C);
 
             return (byte)result;
         }
@@ -198,7 +192,7 @@ namespace ZeXal.CPUCore.Opcodes
             StringBuilder builder = new StringBuilder();
             byte value = memorymap.GetByte((ushort)(address + 1));
             n_bytes = 2;
-            builder.AppendFormat("sub a,0x{0:X2}", value);
+            builder.AppendFormat("sbc a,0x{0:X2}", value);
             return builder.ToString();
         }
     }

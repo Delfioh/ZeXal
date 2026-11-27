@@ -196,7 +196,7 @@ namespace ZeXal.CPUCore.Opcodes
             byte value = cpu.memorymap.GetByte(cpu.regs.HL);
             PerformBIT(value, cpu);
             cpu.regs.IncreasePC(1);
-            return 16;
+            return 12;
         }
 
         public override string GetOpcodeData(IMemoryMapper memorymap, ushort address, out byte n_bytes)

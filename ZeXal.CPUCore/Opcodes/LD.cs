@@ -61,7 +61,7 @@ namespace ZeXal.CPUCore.Opcodes
         public override int Execute(CPU cpu)
         {
             byte value = cpu.memorymap.GetByte((ushort)(cpu.regs.PC + 1));
-            cpu.regs.D = cpu.memorymap.GetByte(value);
+            cpu.regs.D = value;
             cpu.regs.IncreasePC(2);
             return 8;
         }
@@ -82,7 +82,7 @@ namespace ZeXal.CPUCore.Opcodes
         public override int Execute(CPU cpu)
         {
             byte value = cpu.memorymap.GetByte((ushort)(cpu.regs.PC + 1));
-            cpu.regs.E = cpu.memorymap.GetByte(value);
+            cpu.regs.E = value;
             cpu.regs.IncreasePC(2);
             return 8;
         }
@@ -103,7 +103,7 @@ namespace ZeXal.CPUCore.Opcodes
         public override int Execute(CPU cpu)
         {
             byte value = cpu.memorymap.GetByte((ushort)(cpu.regs.PC + 1));
-            cpu.regs.H = cpu.memorymap.GetByte(value);
+            cpu.regs.H = value;
             cpu.regs.IncreasePC(2);
             return 8;
         }
@@ -124,7 +124,7 @@ namespace ZeXal.CPUCore.Opcodes
         public override int Execute(CPU cpu)
         {
             byte value = cpu.memorymap.GetByte((ushort)(cpu.regs.PC + 1));
-            cpu.regs.L = cpu.memorymap.GetByte(value);
+            cpu.regs.L = value;
             cpu.regs.IncreasePC(2);
             return 8;
         }
@@ -1225,7 +1225,7 @@ namespace ZeXal.CPUCore.Opcodes
         public override int Execute(CPU cpu)
         {
             cpu.regs.A = cpu.memorymap.GetByte(cpu.regs.BC);
-            cpu.regs.IncreasePC(2);
+            cpu.regs.IncreasePC(1);
             return 8;
         }
 
@@ -1241,7 +1241,7 @@ namespace ZeXal.CPUCore.Opcodes
         public override int Execute(CPU cpu)
         {
             cpu.regs.A = cpu.memorymap.GetByte(cpu.regs.DE);
-            cpu.regs.IncreasePC(2);
+            cpu.regs.IncreasePC(1);
             return 8;
         }
 

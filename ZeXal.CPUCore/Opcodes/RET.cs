@@ -16,7 +16,7 @@ namespace ZeXal.CPUCore.Opcodes
             ushort jump_address = cpu.memorymap.GetUShort(cpu.regs.SP);
             cpu.regs.SP += 2;
             cpu.regs.SetPC(jump_address);
-            return 8;
+            return 16;
         }
 
         public override string GetOpcodeData(IMemoryMapper memorymap, ushort address, out byte n_bytes)
@@ -40,16 +40,15 @@ namespace ZeXal.CPUCore.Opcodes
     {
         public override int Execute(CPU cpu)
         {
-            ushort jump_address = cpu.memorymap.GetUShort(cpu.regs.SP);
             if (!cpu.regs.IsFlagSet(Flags.Z))
             {
+                ushort jump_address = cpu.memorymap.GetUShort(cpu.regs.SP);
                 cpu.regs.SP += 2;
                 cpu.regs.SetPC(jump_address);
+                return 20;
             }
-            else
-            {
-                cpu.regs.IncreasePC(1);
-            }
+
+            cpu.regs.IncreasePC(1);
             return 8;
         }
 
@@ -65,23 +64,22 @@ namespace ZeXal.CPUCore.Opcodes
     {
         public override int Execute(CPU cpu)
         {
-            ushort jump_address = cpu.memorymap.GetUShort(cpu.regs.SP);
             if (cpu.regs.IsFlagSet(Flags.Z))
             {         
+                ushort jump_address = cpu.memorymap.GetUShort(cpu.regs.SP);
                 cpu.regs.SP += 2;
                 cpu.regs.SetPC(jump_address);
+                return 20;
             }
-            else
-            {
-                cpu.regs.IncreasePC(1);
-            }
+
+            cpu.regs.IncreasePC(1);
             return 8;
         }
 
         public override string GetOpcodeData(IMemoryMapper memorymap, ushort address, out byte n_bytes)
         {
             n_bytes = 1;
-            return "ret cc";
+            return "ret z";
         }
     }
 
@@ -90,16 +88,15 @@ namespace ZeXal.CPUCore.Opcodes
     {
         public override int Execute(CPU cpu)
         {
-            ushort jump_address = cpu.memorymap.GetUShort(cpu.regs.SP);
             if (!cpu.regs.IsFlagSet(Flags.C))
             {
+                ushort jump_address = cpu.memorymap.GetUShort(cpu.regs.SP);
                 cpu.regs.SP += 2;
                 cpu.regs.SetPC(jump_address);
+                return 20;
             }
-            else
-            {
-                cpu.regs.IncreasePC(1);
-            }
+
+            cpu.regs.IncreasePC(1);
             return 8;
         }
 
@@ -115,16 +112,15 @@ namespace ZeXal.CPUCore.Opcodes
     {
         public override int Execute(CPU cpu)
         {
-            ushort jump_address = cpu.memorymap.GetUShort(cpu.regs.SP);
             if (cpu.regs.IsFlagSet(Flags.C))
             {
+                ushort jump_address = cpu.memorymap.GetUShort(cpu.regs.SP);
                 cpu.regs.SP += 2;
                 cpu.regs.SetPC(jump_address);
+                return 20;
             }
-            else
-            {
-                cpu.regs.IncreasePC(1);
-            }
+
+            cpu.regs.IncreasePC(1);
             return 8;
         }
 
@@ -149,7 +145,7 @@ namespace ZeXal.CPUCore.Opcodes
             cpu.regs.SP += 2;
             cpu.regs.SetPC(jump_address);
             cpu.IR_Enable();
-            return 8;
+            return 16;
         }
 
         public override string GetOpcodeData(IMemoryMapper memorymap, ushort address, out byte n_bytes)

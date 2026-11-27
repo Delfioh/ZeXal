@@ -20,7 +20,7 @@ namespace ZeXal.CPUCore.Opcodes
             cpu.memorymap.SetUShort(cpu.regs.SP, (ushort)(cpu.regs.PC + 3));
             ushort jump_address = cpu.memorymap.GetUShort((ushort)(cpu.regs.PC + 1));
             cpu.regs.SetPC(jump_address);
-            return 12;
+            return 24;
         }
 
         public override string GetOpcodeData(IMemoryMapper memorymap, ushort address, out byte n_bytes)
@@ -56,11 +56,10 @@ namespace ZeXal.CPUCore.Opcodes
                 cpu.memorymap.SetUShort(cpu.regs.SP, (ushort)(cpu.regs.PC + 3));
                 ushort jump_address = cpu.memorymap.GetUShort((ushort)(cpu.regs.PC + 1));
                 cpu.regs.SetPC(jump_address);
+                return 24;
             }
-            else
-            {
-                cpu.regs.IncreasePC(3);
-            }
+
+            cpu.regs.IncreasePC(3);
             return 12;
         }
 
@@ -85,11 +84,10 @@ namespace ZeXal.CPUCore.Opcodes
                 cpu.memorymap.SetUShort(cpu.regs.SP, (ushort)(cpu.regs.PC + 3));
                 ushort jump_address = cpu.memorymap.GetUShort((ushort)(cpu.regs.PC + 1));
                 cpu.regs.SetPC(jump_address);
+                return 24;
             }
-            else
-            {
-                cpu.regs.IncreasePC(3);
-            }
+
+            cpu.regs.IncreasePC(3);
             return 12;
         }
 
@@ -114,11 +112,10 @@ namespace ZeXal.CPUCore.Opcodes
                 cpu.memorymap.SetUShort(cpu.regs.SP, (ushort)(cpu.regs.PC + 3));
                 ushort jump_address = cpu.memorymap.GetUShort((ushort)(cpu.regs.PC + 1));
                 cpu.regs.SetPC(jump_address);
+                return 24;
             }
-            else
-            {
-                cpu.regs.IncreasePC(3);
-            }
+
+            cpu.regs.IncreasePC(3);
             return 12;
         }
 
@@ -143,11 +140,10 @@ namespace ZeXal.CPUCore.Opcodes
                 cpu.memorymap.SetUShort(cpu.regs.SP, (ushort)(cpu.regs.PC + 3));
                 ushort jump_address = cpu.memorymap.GetUShort((ushort)(cpu.regs.PC + 1));
                 cpu.regs.SetPC(jump_address);
+                return 24;
             }
-            else
-            {
-                cpu.regs.IncreasePC(3);
-            }
+
+            cpu.regs.IncreasePC(3);
             return 12;
         }
 

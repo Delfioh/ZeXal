@@ -20,7 +20,7 @@ namespace ZeXal.CPUCore.Opcodes
             StringBuilder builder = new StringBuilder();
             ushort value = memorymap.GetUShort((ushort)(address + 1));
             n_bytes = 3;
-            builder.AppendFormat("lb bc,0x{0:X4}", value);
+            builder.AppendFormat("ld bc,0x{0:X4}", value);
             return builder.ToString();
         }
     }
@@ -40,7 +40,7 @@ namespace ZeXal.CPUCore.Opcodes
             StringBuilder builder = new StringBuilder();
             ushort value = memorymap.GetUShort((ushort)(address + 1));
             n_bytes = 3;
-            builder.AppendFormat("lb de,0x{0:X4}", value);
+            builder.AppendFormat("ld de,0x{0:X4}", value);
             return builder.ToString();
         }
     }
@@ -60,7 +60,7 @@ namespace ZeXal.CPUCore.Opcodes
             StringBuilder builder = new StringBuilder();
             ushort value = memorymap.GetUShort((ushort)(address + 1));
             n_bytes = 3;
-            builder.AppendFormat("lb bc,0x{0:X4}", value);
+            builder.AppendFormat("ld hl,0x{0:X4}", value);
             return builder.ToString();
         }
     }
@@ -80,7 +80,7 @@ namespace ZeXal.CPUCore.Opcodes
             StringBuilder builder = new StringBuilder();
             ushort value = memorymap.GetUShort((ushort)(address + 1));
             n_bytes = 3;
-            builder.AppendFormat("lb sp,0x{0:X4}", value);
+            builder.AppendFormat("ld sp,0x{0:X4}", value);
             return builder.ToString();
         }
     }
@@ -108,17 +108,19 @@ namespace ZeXal.CPUCore.Opcodes
         public override int Execute(CPU cpu)
         {
             byte val = cpu.memorymap.GetByte((ushort)(cpu.regs.PC + 1));
-
-            if (((uint)cpu.regs.SP + val) > 0xFFFF) cpu.regs.SetFlag(Flags.C);
-            else cpu.regs.ClearFlag(Flags.C);
-
-            if ((((uint)cpu.regs.SP & 0x0FFF) + (val & 0x0FFF) + cpu.regs.GetFlag(Flags.C)) > 0x0FFF) cpu.regs.SetFlag(Flags.H);
-            else cpu.regs.ClearFlag(Flags.H);
+            ushort sp = cpu.regs.SP;
 
             cpu.regs.ClearFlag(Flags.Z);
             cpu.regs.ClearFlag(Flags.N);
 
-            cpu.regs.HL = (ushort)(cpu.regs.SP + val);
+            //H and C are computed on the unsigned low byte
+            if (((sp & 0x0F) + (val & 0x0F)) > 0x0F) cpu.regs.SetFlag(Flags.H);
+            else cpu.regs.ClearFlag(Flags.H);
+
+            if (((sp & 0xFF) + val) > 0xFF) cpu.regs.SetFlag(Flags.C);
+            else cpu.regs.ClearFlag(Flags.C);
+
+            cpu.regs.HL = (ushort)(sp + (sbyte)val);
 
             cpu.regs.IncreasePC(2);
             return 12;
@@ -127,12 +129,12 @@ namespace ZeXal.CPUCore.Opcodes
         public override string GetOpcodeData(IMemoryMapper memorymap, ushort address, out byte n_bytes)
         {
             StringBuilder builder = new StringBuilder();
-            byte value = memorymap.GetByte((ushort)(address + 1));
+            sbyte value = (sbyte)memorymap.GetByte((ushort)(address + 1));
             n_bytes = 2;
-            builder.AppendFormat("lb hl,sp+0x{0:X2}", value);
+            builder.AppendFormat("ld hl,sp{0:+0;-0}", value);
             return builder.ToString();
         }
-    }
+        }
 
     //0x08
     class LD_indexnnSP : Opcode

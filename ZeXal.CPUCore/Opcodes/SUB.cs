@@ -21,28 +21,20 @@ namespace ZeXal.CPUCore.Opcodes
     {
         protected byte PerformSUB(byte v1, byte v2, CPU cpu)
         {
-            byte result = 0;
+            int result = v1 - v2;
 
-            if (result == 0) cpu.regs.SetFlag(Flags.Z);
+            if ((byte)result == 0) cpu.regs.SetFlag(Flags.Z);
             else cpu.regs.ClearFlag(Flags.Z);
 
             cpu.regs.SetFlag(Flags.N);
 
-            if ((byte)(v1 & 0x0F) < (byte)(v2 & 0x0F)) cpu.regs.SetFlag(Flags.H);
+            if ((v1 & 0x0F) < (v2 & 0x0F)) cpu.regs.SetFlag(Flags.H);
             else cpu.regs.ClearFlag(Flags.H);
 
-            if (v1 < v2)
-            {
-                result = (byte)(0xFF - (v2 - v1));
-                cpu.regs.SetFlag(Flags.C);
-            }
-            else
-            {
-                result = (byte)(v1 - v2);
-                cpu.regs.ClearFlag(Flags.C);
-            }
+            if (result < 0) cpu.regs.SetFlag(Flags.C);
+            else cpu.regs.ClearFlag(Flags.C);
 
-            return result;
+            return (byte)result;
         }
     }
 

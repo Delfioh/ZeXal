@@ -71,7 +71,16 @@ namespace ZeXal.CPUCore
             }
             else next_opcode = opcodes[opcode_id];
 
-            int cycles = next_opcode.Execute(this);            
+            int cycles = next_opcode.Execute(this);
+
+            //CB prefixed opcodes are a single instruction: execute the second byte
+            //immediately, so that interrupts can't be serviced between prefix and opcode
+            if (prefix_cb)
+            {
+                prefix_cb = false;
+                opcode_id = _memorymap.GetByte((ushort)regs.PC);
+                cycles += cb_opcodes[opcode_id].Execute(this);
+            }
 
             //INTERRUPT HANDLING
             if (ir_handler != null) ir_handler.HandleIR(this);
@@ -95,11 +104,7 @@ namespace ZeXal.CPUCore
                 byte opcode_id = _memorymap.GetByte(address);
                 Opcode next_opcode;
 
-                if (prefix_cb)
-                {
-                    next_opcode = cb_opcodes[opcode_id];
-                    prefix_cb = false;
-                }
+                if (is_cb_opcode) next_opcode = cb_opcodes[opcode_id];
                 else next_opcode = opcodes[opcode_id];
 
                 string opcode_data = next_opcode.GetOpcodeData(this.memorymap, address, out n_byte);
@@ -269,7 +274,7 @@ namespace ZeXal.CPUCore
             opcodes.Add(0x94, new SUB_AH());
             opcodes.Add(0x95, new SUB_AL());
             opcodes.Add(0x96, new SUB_AindexHL());
-            opcodes.Add(0xD6, new SBC_An());
+            opcodes.Add(0xD6, new SUB_An());
             opcodes.Add(0x9F, new SBC_AA());
             opcodes.Add(0x98, new SBC_AB());
             opcodes.Add(0x99, new SBC_AC());
@@ -330,7 +335,7 @@ namespace ZeXal.CPUCore
             opcodes.Add(0x1D, new DEC_E());
             opcodes.Add(0x25, new DEC_H());
             opcodes.Add(0x2D, new DEC_L());
-            opcodes.Add(0x35, new INC_indexHL());
+            opcodes.Add(0x35, new DEC_indexHL());
             opcodes.Add(0x09, new ADD_HL_BC());
             opcodes.Add(0x19, new ADD_HL_DE());
             opcodes.Add(0x29, new ADD_HL_HL());
