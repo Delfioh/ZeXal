@@ -10,7 +10,7 @@ namespace ZeXal.CPUCore.Opcodes
     //Rotate A right. Old bit 0 to Carry flag.
     //
     //Flags affected:
-    //Z - Set if result is zero.
+    //Z - Reset.
     //N - Reset.
     //H - Reset.
     //C - Contains old bit ' data.
@@ -30,8 +30,7 @@ namespace ZeXal.CPUCore.Opcodes
 
             cpu.regs.A = (byte)((cpu.regs.A >> 1) | (rot_bit << 7));
 
-            if (cpu.regs.A == 0) cpu.regs.SetFlag(Flags.Z);
-            else cpu.regs.ClearFlag(Flags.Z);
+            cpu.regs.ClearFlag(Flags.Z);
 
             cpu.regs.IncreasePC(1);
             return 4;

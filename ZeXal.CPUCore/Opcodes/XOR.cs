@@ -111,6 +111,12 @@ namespace ZeXal.CPUCore.Opcodes
             cpu.regs.IncreasePC(1);
             return 4;
         }
+
+        public override string GetOpcodeData(IMemoryMapper memorymap, ushort address, out byte n_bytes)
+        {
+            n_bytes = 1;
+            return "xor a,e";
+        }
     }
 
     //0xAC

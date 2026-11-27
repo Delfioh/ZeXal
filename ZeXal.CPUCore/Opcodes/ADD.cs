@@ -21,18 +21,18 @@ namespace ZeXal.CPUCore.Opcodes
     {
         protected byte PerformADD(byte v1, byte v2, CPU cpu)
         {
-            ushort result = (ushort)(v1 + v2);
+            int result = v1 + v2;
 
-            if (result == 0) cpu.regs.SetFlag(Flags.Z);
+            if ((byte)result == 0) cpu.regs.SetFlag(Flags.Z);
             else cpu.regs.ClearFlag(Flags.Z);
 
             cpu.regs.ClearFlag(Flags.N);
 
+            if (((v1 & 0x0F) + (v2 & 0x0F)) > 0x0F) cpu.regs.SetFlag(Flags.H);
+            else cpu.regs.ClearFlag(Flags.H);
+
             if (result > 0xFF) cpu.regs.SetFlag(Flags.C);
             else cpu.regs.ClearFlag(Flags.C);
-
-            if (((byte)(v1 & 0x0F) + (byte)(v2 & 0x0F) + cpu.regs.GetFlag(Flags.C)) > 0x0F) cpu.regs.SetFlag(Flags.H);
-            else cpu.regs.ClearFlag(Flags.H);
 
             return (byte)result;
         }

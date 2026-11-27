@@ -8,7 +8,104 @@ namespace ZeXal.Test
 {
     class Program
     {
-        static void Main(string[] args)
+        static int Main(string[] args)
+        {
+            TestRomOptions test_options;
+            string error;
+
+            if (!ParseArguments(args, out test_options, out error))
+            {
+                if (error != null) Console.Error.WriteLine(error);
+                PrintUsage();
+                return error != null ? (int)TestResult.Error : 0;
+            }
+
+            if (test_options != null)
+            {
+                TestRomRunner runner = new TestRomRunner(test_options);
+                return (int)runner.Run();
+            }
+
+            RunInteractive();
+            return 0;
+        }
+
+        static bool ParseArguments(string[] args, out TestRomOptions options, out string error)
+        {
+            options = null;
+            error = null;
+
+            for (int i = 0; i < args.Length; i++)
+            {
+                string arg = args[i];
+                switch (arg)
+                {
+                    case "-h":
+                    case "--help":
+                        return false;
+
+                    case "-t":
+                    case "--test-rom":
+                        if (i + 1 >= args.Length) { error = arg + " requires a ROM path"; return false; }
+                        if (options == null) options = new TestRomOptions();
+                        options.RomPath = args[++i];
+                        break;
+
+                    case "--frames":
+                        {
+                            int frames;
+                            if (i + 1 >= args.Length || !int.TryParse(args[++i], out frames) || frames <= 0)
+                            {
+                                error = "--frames requires a positive number";
+                                return false;
+                            }
+                            if (options == null) options = new TestRomOptions();
+                            options.MaxFrames = frames;
+                            break;
+                        }
+
+                    case "--screenshot":
+                        if (i + 1 >= args.Length) { error = "--screenshot requires a file path"; return false; }
+                        if (options == null) options = new TestRomOptions();
+                        options.ScreenshotPath = args[++i];
+                        break;
+
+                    case "--trace":
+                        if (options == null) options = new TestRomOptions();
+                        options.Trace = true;
+                        break;
+
+                    default:
+                        error = "Unknown argument: " + arg;
+                        return false;
+                }
+            }
+
+            if (options != null && options.RomPath == null)
+            {
+                error = "--frames, --screenshot and --trace require --test-rom";
+                return false;
+            }
+
+            return true;
+        }
+
+        static void PrintUsage()
+        {
+            Console.WriteLine("Usage:");
+            Console.WriteLine("  ZeXal.Test                       Step through Binaries/test.vm interactively");
+            Console.WriteLine("  ZeXal.Test --test-rom <file.gb>  Run a test ROM on the emulated DMG-001");
+            Console.WriteLine();
+            Console.WriteLine("Test ROM options:");
+            Console.WriteLine("  -t, --test-rom <file>   ROM to run (ROM only, MBC1, MBC3, MBC5)");
+            Console.WriteLine("  --frames <n>            Stop after n frames if no result is detected (default 6000)");
+            Console.WriteLine("  --screenshot <file>     Save the last frame as a BMP image");
+            Console.WriteLine("  --trace                 Print every executed instruction (slow)");
+            Console.WriteLine();
+            Console.WriteLine("Exit code: 0 passed, 1 failed, 2 no result (timeout), 3 error");
+        }
+
+        static void RunInteractive()
         {
             TestMemoryMap memory = new TestMemoryMap();
             memory.LoadExecutable("Binaries/test.vm");
@@ -16,7 +113,6 @@ namespace ZeXal.Test
             TestIRHandler irhandler = new TestIRHandler();
 
             CPU cpu = new CPU(memory, irhandler, 0x0000);
-            ASCIIEncoding encoder = new ASCIIEncoding();
 
             while (true)
             {
@@ -25,7 +121,7 @@ namespace ZeXal.Test
                 cpu.ExecuteNextOpcode();
                 WriteTrace(cpu);
                 Console.ReadLine();
-            } 
+            }
         }
 
         static void WriteTrace(CPU cpu)

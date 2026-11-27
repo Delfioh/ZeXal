@@ -22,6 +22,9 @@ namespace ZeXal.Test
 
         public void HandleIR(CPU cpu)
         {
+            //No interrupt sources here: never stay halted (HALT behaves like NOP)
+            cpu.halted = false;
+
             if (ir_enabled)
             {
                 //DO SOMETHING

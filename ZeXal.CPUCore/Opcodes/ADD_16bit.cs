@@ -28,7 +28,7 @@ namespace ZeXal.CPUCore.Opcodes
             if (result > 0xFFFF) cpu.regs.SetFlag(Flags.C);
             else cpu.regs.ClearFlag(Flags.C);
 
-            if (((cpu.regs.HL & 0x0FFF) + (v & 0x0FFF) + cpu.regs.GetFlag(Flags.C)) > 0x0FFF) cpu.regs.SetFlag(Flags.H);
+            if (((cpu.regs.HL & 0x0FFF) + (v & 0x0FFF)) > 0x0FFF) cpu.regs.SetFlag(Flags.H);
             else cpu.regs.ClearFlag(Flags.H);
 
             return (ushort)result;
@@ -120,18 +120,19 @@ namespace ZeXal.CPUCore.Opcodes
         public override int Execute(CPU cpu)
         {
             byte value = cpu.memorymap.GetByte((ushort)(cpu.regs.PC + 1));
-            uint new_sp_value = (uint)(cpu.regs.SP + value);
+            ushort sp = cpu.regs.SP;
 
             cpu.regs.ClearFlag(Flags.Z);
             cpu.regs.ClearFlag(Flags.N);
 
-            if (new_sp_value > 0xFFFF) cpu.regs.SetFlag(Flags.C);
-            else cpu.regs.ClearFlag(Flags.C);
-
-            if ((((uint)cpu.regs.SP & 0x0FFF) + (value & 0x0FFF) + cpu.regs.GetFlag(Flags.C)) > 0x0FFF) cpu.regs.SetFlag(Flags.H);
+            //H and C are computed on the unsigned low byte
+            if (((sp & 0x0F) + (value & 0x0F)) > 0x0F) cpu.regs.SetFlag(Flags.H);
             else cpu.regs.ClearFlag(Flags.H);
 
-            cpu.regs.SP = (ushort)new_sp_value;
+            if (((sp & 0xFF) + value) > 0xFF) cpu.regs.SetFlag(Flags.C);
+            else cpu.regs.ClearFlag(Flags.C);
+
+            cpu.regs.SP = (ushort)(sp + (sbyte)value);
 
             cpu.regs.IncreasePC(2);
             return 16;
@@ -140,12 +141,12 @@ namespace ZeXal.CPUCore.Opcodes
         public override string GetOpcodeData(IMemoryMapper memorymap, ushort address, out byte n_bytes)
         {
             StringBuilder builder = new StringBuilder();
-            byte value = memorymap.GetByte((ushort)(address + 1));
+            sbyte value = (sbyte)memorymap.GetByte((ushort)(address + 1));
             n_bytes = 2;
-            builder.AppendFormat("add sp,0x{0:X2}", value);
+            builder.AppendFormat("add sp,{0}", value);
             return builder.ToString();
         }
-    }
+        }
 
 
 }

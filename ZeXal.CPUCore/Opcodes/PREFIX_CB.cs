@@ -11,7 +11,7 @@ namespace ZeXal.CPUCore.Opcodes
         {
             cpu.prefix_cb = true;
             cpu.regs.IncreasePC(1);
-            return 4;        
+            return 0;        
         }
 
         public override string GetOpcodeData(IMemoryMapper memorymap, ushort address, out byte n_bytes)

@@ -15,6 +15,10 @@ namespace ZeXal.CPUCore
 
         public bool prefix_cb;
 
+        //Set by HALT: the CPU stops fetching opcodes until an interrupt is pending.
+        //The IIRHandler is responsible for clearing it (see IIRHandler.HandleIR).
+        public bool halted;
+
 
         private IMemoryMapper _memorymap;
         public IMemoryMapper memorymap
@@ -35,6 +39,7 @@ namespace ZeXal.CPUCore
         public CPU(IMemoryMapper memoryMap, IIRHandler IR_handler, ushort PC_start_address = 0x0100)
         {
             prefix_cb = false;
+            halted = false;
 
             enable_ir_next_op = false;
             disable_ir_next_op = false;
@@ -62,16 +67,31 @@ namespace ZeXal.CPUCore
                 disable_ir_next_op = false;
             }
 
-            byte opcode_id = _memorymap.GetByte((ushort)regs.PC);
-            Opcode next_opcode;
-            if (prefix_cb)
-            {
-                next_opcode = cb_opcodes[opcode_id];
-                prefix_cb = false;
-            }
-            else next_opcode = opcodes[opcode_id];
+            int cycles;
 
-            int cycles = next_opcode.Execute(this);            
+            if (halted)
+            {
+                //While halted the CPU just burns cycles waiting for an interrupt
+                cycles = 4;
+            }
+            else
+            {
+                byte opcode_id = _memorymap.GetByte((ushort)regs.PC);
+                Opcode next_opcode;
+                if (!opcodes.TryGetValue(opcode_id, out next_opcode))
+                    throw new InvalidOperationException(String.Format("Illegal opcode 0x{0:X2} at 0x{1:X4}", opcode_id, regs.PC));
+
+                cycles = next_opcode.Execute(this);
+
+                //CB prefixed opcodes are a single instruction: execute the second byte
+                //immediately, so that interrupts can't be serviced between prefix and opcode
+                if (prefix_cb)
+                {
+                    prefix_cb = false;
+                    opcode_id = _memorymap.GetByte((ushort)regs.PC);
+                    cycles += cb_opcodes[opcode_id].Execute(this);
+                }
+            }
 
             //INTERRUPT HANDLING
             if (ir_handler != null) ir_handler.HandleIR(this);
@@ -95,11 +115,7 @@ namespace ZeXal.CPUCore
                 byte opcode_id = _memorymap.GetByte(address);
                 Opcode next_opcode;
 
-                if (prefix_cb)
-                {
-                    next_opcode = cb_opcodes[opcode_id];
-                    prefix_cb = false;
-                }
+                if (is_cb_opcode) next_opcode = cb_opcodes[opcode_id];
                 else next_opcode = opcodes[opcode_id];
 
                 string opcode_data = next_opcode.GetOpcodeData(this.memorymap, address, out n_byte);
@@ -130,10 +146,20 @@ namespace ZeXal.CPUCore
             enable_ir_next_op = true;
         }
 
+        //DI takes effect immediately on the LR35902
         public void IR_Disable()
         {
             enable_ir_next_op = false;
-            disable_ir_next_op = true;
+            disable_ir_next_op = false;
+            if (ir_handler != null) ir_handler.IR_Disable();
+        }
+
+        //Used by RETI: unlike EI, interrupts are enabled without delay
+        public void IR_EnableImmediate()
+        {
+            enable_ir_next_op = false;
+            disable_ir_next_op = false;
+            if (ir_handler != null) ir_handler.IR_Enable();
         }
 
 
@@ -269,7 +295,7 @@ namespace ZeXal.CPUCore
             opcodes.Add(0x94, new SUB_AH());
             opcodes.Add(0x95, new SUB_AL());
             opcodes.Add(0x96, new SUB_AindexHL());
-            opcodes.Add(0xD6, new SBC_An());
+            opcodes.Add(0xD6, new SUB_An());
             opcodes.Add(0x9F, new SBC_AA());
             opcodes.Add(0x98, new SBC_AB());
             opcodes.Add(0x99, new SBC_AC());
@@ -330,7 +356,7 @@ namespace ZeXal.CPUCore
             opcodes.Add(0x1D, new DEC_E());
             opcodes.Add(0x25, new DEC_H());
             opcodes.Add(0x2D, new DEC_L());
-            opcodes.Add(0x35, new INC_indexHL());
+            opcodes.Add(0x35, new DEC_indexHL());
             opcodes.Add(0x09, new ADD_HL_BC());
             opcodes.Add(0x19, new ADD_HL_DE());
             opcodes.Add(0x29, new ADD_HL_HL());

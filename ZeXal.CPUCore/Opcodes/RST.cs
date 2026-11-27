@@ -18,9 +18,9 @@ namespace ZeXal.CPUCore.Opcodes
         public override int Execute(CPU cpu)
         {
             cpu.regs.SP -= 2;
-            cpu.memorymap.SetUShort(cpu.regs.SP, cpu.regs.PC);
+            cpu.memorymap.SetUShort(cpu.regs.SP, (ushort)(cpu.regs.PC + 1));
             cpu.regs.SetPC(0x0000);
-            return 32;
+            return 16;
         }
 
         public override string GetOpcodeData(IMemoryMapper memorymap, ushort address, out byte n_bytes)
@@ -36,9 +36,9 @@ namespace ZeXal.CPUCore.Opcodes
         public override int Execute(CPU cpu)
         {
             cpu.regs.SP -= 2;
-            cpu.memorymap.SetUShort(cpu.regs.SP, cpu.regs.PC);
+            cpu.memorymap.SetUShort(cpu.regs.SP, (ushort)(cpu.regs.PC + 1));
             cpu.regs.SetPC(0x0008);
-            return 32;
+            return 16;
         }
 
         public override string GetOpcodeData(IMemoryMapper memorymap, ushort address, out byte n_bytes)
@@ -54,9 +54,9 @@ namespace ZeXal.CPUCore.Opcodes
         public override int Execute(CPU cpu)
         {
             cpu.regs.SP -= 2;
-            cpu.memorymap.SetUShort(cpu.regs.SP, cpu.regs.PC);
+            cpu.memorymap.SetUShort(cpu.regs.SP, (ushort)(cpu.regs.PC + 1));
             cpu.regs.SetPC(0x0010);
-            return 32;
+            return 16;
         }
 
         public override string GetOpcodeData(IMemoryMapper memorymap, ushort address, out byte n_bytes)
@@ -72,9 +72,9 @@ namespace ZeXal.CPUCore.Opcodes
         public override int Execute(CPU cpu)
         {
             cpu.regs.SP -= 2;
-            cpu.memorymap.SetUShort(cpu.regs.SP, cpu.regs.PC);
+            cpu.memorymap.SetUShort(cpu.regs.SP, (ushort)(cpu.regs.PC + 1));
             cpu.regs.SetPC(0x0018);
-            return 32;
+            return 16;
         }
 
         public override string GetOpcodeData(IMemoryMapper memorymap, ushort address, out byte n_bytes)
@@ -90,9 +90,9 @@ namespace ZeXal.CPUCore.Opcodes
         public override int Execute(CPU cpu)
         {
             cpu.regs.SP -= 2;
-            cpu.memorymap.SetUShort(cpu.regs.SP, cpu.regs.PC);
+            cpu.memorymap.SetUShort(cpu.regs.SP, (ushort)(cpu.regs.PC + 1));
             cpu.regs.SetPC(0x0020);
-            return 32;
+            return 16;
         }
 
         public override string GetOpcodeData(IMemoryMapper memorymap, ushort address, out byte n_bytes)
@@ -108,9 +108,9 @@ namespace ZeXal.CPUCore.Opcodes
         public override int Execute(CPU cpu)
         {
             cpu.regs.SP -= 2;
-            cpu.memorymap.SetUShort(cpu.regs.SP, cpu.regs.PC);
+            cpu.memorymap.SetUShort(cpu.regs.SP, (ushort)(cpu.regs.PC + 1));
             cpu.regs.SetPC(0x0028);
-            return 32;
+            return 16;
         }
 
         public override string GetOpcodeData(IMemoryMapper memorymap, ushort address, out byte n_bytes)
@@ -126,9 +126,9 @@ namespace ZeXal.CPUCore.Opcodes
         public override int Execute(CPU cpu)
         {
             cpu.regs.SP -= 2;
-            cpu.memorymap.SetUShort(cpu.regs.SP, cpu.regs.PC);
+            cpu.memorymap.SetUShort(cpu.regs.SP, (ushort)(cpu.regs.PC + 1));
             cpu.regs.SetPC(0x0030);
-            return 32;
+            return 16;
         }
 
         public override string GetOpcodeData(IMemoryMapper memorymap, ushort address, out byte n_bytes)
@@ -144,9 +144,9 @@ namespace ZeXal.CPUCore.Opcodes
         public override int Execute(CPU cpu)
         {
             cpu.regs.SP -= 2;
-            cpu.memorymap.SetUShort(cpu.regs.SP, cpu.regs.PC);
+            cpu.memorymap.SetUShort(cpu.regs.SP, (ushort)(cpu.regs.PC + 1));
             cpu.regs.SetPC(0x0038);
-            return 32;
+            return 16;
         }
 
         public override string GetOpcodeData(IMemoryMapper memorymap, ushort address, out byte n_bytes)

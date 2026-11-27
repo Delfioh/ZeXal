@@ -13,7 +13,9 @@ namespace ZeXal.CPUCore.Opcodes
     {
         public override int Execute(CPU cpu)
         {
-            //CURRENTLY UNIMPLEMENTED
+            //The CPU stops until an interrupt is pending (IE & IF != 0).
+            //The "HALT bug" (IME=0 with a pending interrupt) is not emulated.
+            cpu.halted = true;
             cpu.regs.IncreasePC(1);
             return 4;
         }
