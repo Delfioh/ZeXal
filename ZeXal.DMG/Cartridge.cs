@@ -199,5 +199,23 @@ namespace ZeXal.DMG
         {
             return offset < ram.Length ? ram[offset] : (byte)0xFF;
         }
+
+        //Battery backed saves: copy of the external RAM, and restore from a previous copy
+        public byte[] GetRAM()
+        {
+            return (byte[])ram.Clone();
+        }
+
+        public void LoadRAM(byte[] data)
+        {
+            if (data == null) return;
+            Array.Copy(data, ram, Math.Min(data.Length, ram.Length));
+        }
+
+        //Header checksum (0x014D) and global checksum (0x014E-0x014F): identify a ROM for its save file
+        public string Identifier
+        {
+            get { return String.Format("{0}_{1:X2}{2:X2}{3:X2}", Title.Length > 0 ? Title : "ROM", rom[0x014D], rom[0x014E], rom[0x014F]); }
+        }
     }
 }

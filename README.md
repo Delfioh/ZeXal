@@ -9,6 +9,7 @@ ZeXal is an emulator lib. for the Sharp LR35902, a cpu based on the Z80 and comm
   `GameBoy` puts everything together.
 - **ZeXal.Test**: console front end (test ROM runner).
 - **ZeXal.Viewer**: Windows Forms front end that shows the display in real time.
+- **ZeXal.Android**: Android app (.NET 9), with on-screen controls. Not part of `ZeXal.sln`.
 
 ## Viewer
 
@@ -46,3 +47,17 @@ Without arguments, `ZeXal.Test` steps through `Binaries/test.vm` as before.
 The PPU renders one scanline at a time at the end of mode 3, which has a fixed length.
 Effects that depend on changing registers in the middle of a scanline are not reproduced,
 and CPU access to VRAM/OAM is never blocked. OAM DMA is instantaneous.
+
+## Android
+
+Requires the .NET 9 SDK with the `android` workload, a JDK 17 and the Android SDK (platform 35):
+
+```
+dotnet workload install android
+dotnet publish ZeXal.Android/ZeXal.Android.csproj -c Release -p:AndroidSdkDirectory=<android-sdk> -p:JavaSdkDirectory=<jdk>
+```
+
+The signed APK is `ZeXal.Android/bin/Release/net9.0-android/publish/io.github.delfioh.zexal-Signed.apk`
+(signed with the debug key; minimum Android 5.0). Tap "ROM" to open a `.gb` file; the last ROM reopens
+at the next start and battery saves are kept in the app storage. Gamepads and keyboards work too
+(D-pad, A/B or X/Z, Start/Enter, Select/Del).

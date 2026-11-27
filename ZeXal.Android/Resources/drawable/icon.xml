@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Launcher icon: a stylized handheld with a green screen -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <path android:fillColor="#C8C8C2" android:pathData="M10,3 h28 a4,4 0 0 1 4,4 v30 a8,8 0 0 1 -8,8 h-24 a4,4 0 0 1 -4,-4 v-34 a4,4 0 0 1 4,-4 z" />
+    <path android:fillColor="#5A5A6E" android:pathData="M12,7 h24 a2,2 0 0 1 2,2 v15 a2,2 0 0 1 -2,2 h-24 a2,2 0 0 1 -2,-2 v-15 a2,2 0 0 1 2,-2 z" />
+    <path android:fillColor="#9BBC0F" android:pathData="M15,10 h18 v13 h-18 z" />
+    <path android:fillColor="#306230" android:pathData="M19,13 h4 v4 h-4 z M25,13 h4 v4 h-4 z M18,19 h12 v2 h-12 z" />
+    <path android:fillColor="#333333" android:pathData="M14,32 h3 v-3 h3 v3 h3 v3 h-3 v3 h-3 v-3 h-3 z" />
+    <path android:fillColor="#9A2257" android:pathData="M32,33 m-2.5,0 a2.5,2.5 0 1 0 5,0 a2.5,2.5 0 1 0 -5,0 M37,30 m-2.5,0 a2.5,2.5 0 1 0 5,0 a2.5,2.5 0 1 0 -5,0" />
+</vector>
